@@ -26,7 +26,7 @@
         <i class="fa-solid fa-receipt"></i> &nbsp; <a href=""> Invoices </a>
       </li>
       <li class="text-lg text-gray-600 cursor-pointer hover:text-gray-800">
-        <i class="fa-solid fa-shop"></i> &nbsp; <a href=""> Search Market </a>
+        <i class="fa-solid fa-shop"></i> &nbsp; <a href="SearchMarket.php"> Search Market </a>
       </li>
     </ul>
   </div>

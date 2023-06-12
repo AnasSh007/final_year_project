@@ -8,5 +8,6 @@
   <link href="/dist/output.css" rel="stylesheet" />
   <link rel="icon" type="image/x-icon" href="/img/logo-removebg-preview.png" />
   <title>PieCyfer Asset Deck</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.3/JsBarcode.all.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>

@@ -6,14 +6,15 @@ if (!$_SESSION['username']) {
   header("Location: login.php");
 }
 if (isset($_POST['submit'])) {
-  $username = $_POST['username'];
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $role = $_POST['role'];
-  $gender = $_POST['gender'];
+  $productName = $_POST['productName'];
+  $vendor = $_POST['vendor'];
+  $price = $_POST['price'];
+  $description = $_POST['description'];
+  $category = $_POST['category'];
   $status = $_POST['status'];
-  $additional_info = $_POST['additional_info'];
-  $sql = "INSERT INTO USERS(NAME, EMAIL, PASSWORD, ROLE, GENDER, STATUS, ADDITIONAL_INFO) VALUES('$username', '$email','$password','$role','$gender','$status', '$additional_info')";
+  $barcode = rand(0, 100000000000000);
+  // $barcode = "PIECYFER-" . $random;
+  $sql = "INSERT INTO ASSETS(PRODUCT, VENDOR, DESCRIPTION, PURCHASE_PRICE, BARCODE, STATUS, CATEGORYID) VALUES('$productName', '$vendor','$description','$price', '$barcode', '$status','$category')";
   $result = $conn->query($sql);
   if ($result == TRUE) {
 
@@ -25,7 +26,7 @@ if (isset($_POST['submit'])) {
 
   }
   $conn->close();
-  header('Location: employees.php');
+  header('Location: assets.php');
 }
 ?>
 <div id="newUserModal" class="fixed left-0 top-0 flex justify-center items-center h-screen w-full"
@@ -39,45 +40,33 @@ if (isset($_POST['submit'])) {
           </h1>
           <label for="username">
             <span class="text-gray-600"> Product Name: </span></label>
-          <input type="text" placeholder="Laptop" name="product" class="text-gray-600 focus:outline-none" />
+          <input type="text" placeholder="Laptop" name="productName" class="text-gray-600 focus:outline-none" />
           <label for="">
             <span class="text-gray-600"> Vendor: </span></label>
-          <input type="text" name="vendor" class="text-gray-600 focus:outline-none" />
+          <input type="text" name="vendor" class="text-gray-600 focus:outline-none" placeholder="Microsoft" />
           <label for="password">
             <span class="text-gray-600"> Description: </span></label>
           <input type="text" name="description" placeholder="enter description here..."
             class="text-gray-600 focus:outline-none" />
-          <select name="role" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
+          <span class="text-gray-600"> Purchase Price: </span></label>
+          <input type="number" name="price" placeholder="enter description here..."
+            class="text-gray-600 focus:outline-none" />
+          <select name="category" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
             <option value="" value="none" selected disabled hidden>
-              Role
+              Category
             </option>
-            <option value="admin">Admin</option>
-            <option value="employee">Employee</option>
-          </select>
-
-          <select name="gender" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
-            <option value="" value="none" selected disabled hidden>
-              Gender
-            </option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="1">Cat 1</option>
+            <option value="2">Cat 2</option>
           </select>
           <select name="status" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
             <option value="" value="none" selected disabled hidden>
               Status
             </option>
-            <option value="active">Active</option>
-            <option value="not active">Not Active</option>
+            <option value="Using">Using</option>
+            <option value="Not Using">Not Using</option>
+            <option value="Repairing">Repairing</option>
           </select>
-          <!-- <label for="image">
-            <span class="text-gray-600"> Avatar: </span></label
-          >
-          <input
-            type="file"
-            class="text-sm text-gray-600 focus:outline-none"
-          /> -->
-          <textarea name="additional_info" id="" cols="30" rows="3" class="p-2 focus:outline-none text-gray-700"
-            placeholder="additional info..."></textarea>
+          <br />
           <div class="flex justify-evenly">
             <button id="saveNewUserBtn" type="submit" name="submit"
               class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
