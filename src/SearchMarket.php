@@ -1,70 +1,199 @@
+<?php
+require('config.php');
+session_start();
+if (!$_SESSION['username']) {
+  header('Location: login.php');
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+<?php require('head.php') ?>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
-  <title>Document</title>
-</head>
+<body class="bg-gray-100">
+  <!-- Header -->
+  <?php require('header.php') ?>
 
-<body>
-  <button onclick="getCSV()">Get Data</button>
-  <button onclick="getLaptops()">Click Me</button>
+  <!-- Aside Bar -->
+  <?php require('aside.php') ?>
+
+  <!-- Dashboard -->
+  <section class="container p-6 ml-[20%] inline-block h-fit w-4/5 bottom-0 overflow-y-scroll">
+    <span class="flex justify-between items-center">
+      <div class="flex justify-between items-center space-x-4 mx-1 mb-3">
+        <h1 class="text-3xl text-gray-600">Search Market</h1>
+      </div>
+      <div>
+        <Button onclick="refreshData()"
+          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"><i
+            class="fa-solid fa-arrow-rotate-right"></i></Button>
+        <Button onclick="fetchLaptopCSV()"
+          class="mx-5 rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</Button>
+        <Button onclick="fetchMobileCSV()"
+          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Mobiles</Button>
+      </div>
+    </span>
+    <div id="toastContainer"></div>
+    <table id="myTable" class="text-gray-600 text-center w-full mt-5 text-sm">
+      <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
+        <tr>
+          <th>Sr#</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Reviews</th>
+          <th>Link</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody id="output"></tbody>
+    </table>
+
+  </section>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
+
   <script>
-    const encrypt = (text) => {
-      return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
-    };
-    async function getLaptops() {
-      await fetch("http://localhost:5050/scraped-data", {
-        // mode: "no-cors",
-        // method: "get",
-        // headers: {
-        //   "Content-Type": "application/json",
-        // },
-        // body: JSON.stringify(),
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          // json.map((obj) => {
-          //   obj.id = encrypt(obj.laptopName);
-          //   // console.log(obj.laptopName);
-          //   // console.log(obj);
-          // });
-          console.log(json);
-        })
-        .catch((e) => {
-          console.log("error occured = " + e);
-        });
+    var fetched;
+
+    // ../laptops.csv
+    async function fetchMobileCSV() {
+      fetched = "Mobile";
+      try {
+        const response = await fetch('../mobiles.csv');
+        const csvData = await response.text();
+        const parsedData = Papa.parse(csvData);
+        displayData(parsedData);
+      } catch (error) {
+        console.error('Error fetching CSV:', error);
+      }
     }
-    function getCSV() {
-      fetch('data.csv')
-        .then(response => response.text())
-        .then(csv => {
-          processCSV(csv);
-        })
-        .catch(error => {
-          console.error('Error fetching CSV file:', error);
-        });
 
-      function processCSV(csv) {
-        const lines = csv.split('\n');
+    // ../laptops.csv
+    async function fetchLaptopCSV() {
+      fetched = "Laptop";
+      try {
+        const response = await fetch('../laptops.csv');
+        const csvData = await response.text();
+        const parsedData = Papa.parse(csvData);
+        displayData(parsedData);
+      } catch (error) {
+        console.error('Error fetching CSV:', error);
+      }
+    }
 
-        for (let i = 0; i < lines.length; i++) {
-          const values = lines[i].split(',');
+    function parseCSV(csvData) {
+      const rows = csvData.split('\n');
+      const headers = rows[0].split(',');
 
-          // Process each value
-          for (let j = 0; j < values.length; j++) {
-            const value = values[j];
-
-            // Perform operations on each value
-            console.log(value);
+      const data = [];
+      for (let i = 1; i < rows.length; i++) {
+        const values = rows[i].split(',');
+        if (values.length === headers.length) {
+          const entry = {};
+          for (let j = 0; j < headers.length; j++) {
+            entry[headers[j]] = values[j];
           }
+          data.push(entry);
+
         }
       }
 
+      return data;
     }
+
+    function displayData(obj) {
+
+      const table = document.getElementById('output');
+      table.innerHTML = "";
+      obj.data.forEach((array, index) => {
+        if (index == 0)
+          return;
+        const row = table.insertRow();
+        row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+
+        const serialNoCell = row.insertCell();
+        serialNoCell.classList.add("font-bold");
+        serialNoCell.textContent = index;
+
+        const nameCell = row.insertCell();
+        nameCell.textContent = array[0];
+
+        const priceCell = row.insertCell();
+        priceCell.textContent = array[2];
+
+        const reviewsCell = row.insertCell();
+        reviewsCell.textContent = array[3];
+
+        const linkCell = row.insertCell();
+        const linkAnchor = document.createElement('a');
+        linkAnchor.href = array[1];
+        linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+        linkCell.appendChild(linkAnchor);
+
+        const locationCell = row.insertCell();
+        locationCell.textContent = array[4];
+      });
+    }
+
+    // ------------------------------------------------------------
+
+    function refreshData() {
+      if (fetched == 'Laptop') {
+        fetch('http://127.0.0.1:5050/scraped-data')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not OK');
+            }
+            else {
+              showToast('Data Refreshed, Press Laptops Button');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+      else if (fetched == 'Mobile') {
+        fetch('http://127.0.0.1:5050/scraped-data-mobiles')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not OK');
+            }
+            else {
+              showToast('Data Refreshed, Press Mobiles Button');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+
+    }
+
+    // ------------------------------------------------------------
+
+    function showToast(msg) {
+      const toastContainer = document.getElementById("toastContainer");
+
+      // Create toast element
+      const toast = document.createElement("div");
+      toast.classList.add("toast");
+      toast.innerText = msg;
+
+      // Add toast element to container
+      toastContainer.appendChild(toast);
+
+      // Show toast
+      toastContainer.classList.add("show");
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        toastContainer.classList.remove("show");
+        // Remove toast element from container
+        toastContainer.removeChild(toast);
+      }, 3000);
+    }
+
   </script>
 </body>
 

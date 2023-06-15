@@ -19,6 +19,10 @@ if (isset($_GET['submit'])) {
   $categoryId = $_GET['categoryId'];
   $sql = "UPDATE ASSETS SET PRODUCT = '$product', VENDOR = '$vendor', DESCRIPTION ='$description', purchase_price = '$purchase_price', barcode='$barcode', status = '$status', categoryId = '$categoryId' WHERE id='$id' ";
   $result = $conn->query($sql);
+  $desc = $product . ' record updated ';
+  $dateTime = date('l, F j, Y - H:i:s');
+  $repairedSql = "INSERT INTO LOGS (DESCRIPTION, DATE, ASSETID) VALUES ('$desc',  '$dateTime', '$id' )";
+  $conn->query($repairedSql);
   header('Location: assets.php');
   if (!$result == TRUE) {
     echo "Error:" . $sql . "<br>" . $conn->error;
@@ -26,8 +30,25 @@ if (isset($_GET['submit'])) {
   $conn->close();
 }
 if (isset($_GET['saveEditedRepairingAssetBtn'])) {
+  $id = $_GET['id'];
+  $status = $_GET['status'];
+  $repairingCost = $_GET['repairingCost'];
+  $sql2 = "SELECT PRODUCT FROM ASSETS WHERE ID = '$id' ";
+  $result2 = $conn->query($sql2);
 
+  if ($result2 && $result2->num_rows > 0) {
+    $row = $result2->fetch_row();
+    $product = $row[0]; // Assuming the 'PRODUCT' column is the first column
+    $desc = $product . ' repaired, repairing cost -> ' . $repairingCost;
+    $dateTime = date('l, F j, Y - H:i:s');
+    $repairedSql = "INSERT INTO LOGS (DESCRIPTION, REPAIRING_COST, DATE, ASSETID) VALUES ('$desc', '$repairingCost',  '$dateTime', '$id' )";
+    $conn->query($repairedSql);
+    $changeStatusSql = "UPDATE ASSETS SET STATUS = '$status' WHERE ID = $id";
+    $conn->query($changeStatusSql);
+    header('Location: assets.php');
+  }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,8 +72,12 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
           </a>
         </button>
       </div>
-      <canvas id="barcodeCanvas" class="cursor-pointer h-[70px] w-[150px]" style="box-shadow: inset 0px 0px 5px grey;"
-        onclick="printBarcode()"></canvas>
+      <div>
+        <img id="barcodeCanvas" class="cursor-pointer h-[70px] w-[150px]"
+          style="box-shadow: inset 0px 0px 5px grey;"></img>
+        <span onclick="printBarcode()" class="m-0 text-xs text-gray-600 italic cursor-pointer hover:underline">click to
+          print</span>
+      </div>
     </span>
     <table class="text-gray-600 text-center w-full mt-5 text-sm">
       <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
@@ -254,7 +279,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
               <span class="text-gray-600"> Product: </span></label>
             <input type="text" disabled name="product" id="editRepairingProduct"
               class="text-gray-600 focus:outline-none cursor-not-allowed" />
-            <span class="text-gray-600"> Repairing Cost: </span></label>
+            <label><span class="text-gray-600"> Repairing Cost: </span></label>
             <input type="text" name="repairingCost" id="repairingCost" class="text-gray-600 focus:outline-none"
               placeholder="10000" />
             <select id="editRepairingStatus" name="status" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
@@ -334,6 +359,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
         alert('Please Enter a Repairing Cost');
         return false;
       }
+      return true;
     }
 
     function deleteAsset(id) {
@@ -363,8 +389,8 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
       const element = document.getElementById(elementId);
 
       if (element) {
-        const printWindow = window.open('', '', 'width=600,height=600');
-        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        const printWindow = window.open('', '', 'width=610,height=600');
+        printWindow.document.write('<html><head></head><body>');
         printWindow.document.write(element.outerHTML);
         printWindow.document.write('</body></html>');
         printWindow.document.close();
@@ -387,9 +413,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
       } else {
         console.log('Element with ID ' + elementId + ' not found.');
       }
-    }
-
-  </script>
+    }  </script>
 </body>
 
 </html>

@@ -51,6 +51,9 @@ if (isset($_POST['submit'])) {
           <span class="text-gray-600"> Purchase Price: </span></label>
           <input type="number" name="price" placeholder="enter description here..."
             class="text-gray-600 focus:outline-none" />
+          <?php
+
+          ?>
           <select name="category" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
             <option value="" value="none" selected disabled hidden>
               Category

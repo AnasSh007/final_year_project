@@ -20,11 +20,11 @@
         <i class="fa-solid fa-layer-group"></i> &nbsp; <a href="assets.php"> Assets </a>
       </li>
       <li class="text-lg text-gray-600 cursor-pointer hover:text-gray-800">
-        <i class="fa-regular fa-note-sticky"></i> &nbsp; <a href=""> Logs </a>
+        <i class="fa-regular fa-note-sticky"></i> &nbsp; <a href="logs.php"> Logs </a>
       </li>
-      <li class="text-lg text-gray-600 cursor-pointer hover:text-gray-800">
+      <!-- <li class="text-lg text-gray-600 cursor-pointer hover:text-gray-800">
         <i class="fa-solid fa-receipt"></i> &nbsp; <a href=""> Invoices </a>
-      </li>
+      </li> -->
       <li class="text-lg text-gray-600 cursor-pointer hover:text-gray-800">
         <i class="fa-solid fa-shop"></i> &nbsp; <a href="SearchMarket.php"> Search Market </a>
       </li>
