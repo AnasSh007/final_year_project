@@ -60,9 +60,11 @@ if (!$_SESSION['username']) {
     async function fetchMobileCSV() {
       fetched = "Mobile";
       try {
-        const response = await fetch('../mobiles.csv');
-        const csvData = await response.text();
-        const parsedData = Papa.parse(csvData);
+        let response = await fetch('../mobiles.csv');
+        console.log(response);
+        let csvData = await response.text();
+        console.log(csvData);
+        let parsedData = Papa.parse(csvData);
         displayData(parsedData);
       } catch (error) {
         console.error('Error fetching CSV:', error);
@@ -72,10 +74,13 @@ if (!$_SESSION['username']) {
     // ../laptops.csv
     async function fetchLaptopCSV() {
       fetched = "Laptop";
+      document.getElementById('output').innerHTML = "";
       try {
-        const response = await fetch('../laptops.csv');
-        const csvData = await response.text();
-        const parsedData = Papa.parse(csvData);
+        let response = await fetch('../laptops.csv');
+        let csvData = await response.text();
+        console.log(csvData);
+        let parsedData = Papa.parse(csvData);
+        console.log(parsedData);
         displayData(parsedData);
       } catch (error) {
         console.error('Error fetching CSV:', error);
@@ -83,14 +88,14 @@ if (!$_SESSION['username']) {
     }
 
     function parseCSV(csvData) {
-      const rows = csvData.split('\n');
-      const headers = rows[0].split(',');
+      let rows = csvData.split('\n');
+      let headers = rows[0].split(',');
 
-      const data = [];
+      let data = [];
       for (let i = 1; i < rows.length; i++) {
-        const values = rows[i].split(',');
+        let values = rows[i].split(',');
         if (values.length === headers.length) {
-          const entry = {};
+          let entry = {};
           for (let j = 0; j < headers.length; j++) {
             entry[headers[j]] = values[j];
           }
@@ -104,34 +109,34 @@ if (!$_SESSION['username']) {
 
     function displayData(obj) {
 
-      const table = document.getElementById('output');
+      let table = document.getElementById('output');
       table.innerHTML = "";
       obj.data.forEach((array, index) => {
         if (index == 0)
           return;
-        const row = table.insertRow();
+        let row = table.insertRow();
         row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
 
-        const serialNoCell = row.insertCell();
+        let serialNoCell = row.insertCell();
         serialNoCell.classList.add("font-bold");
         serialNoCell.textContent = index;
 
-        const nameCell = row.insertCell();
+        let nameCell = row.insertCell();
         nameCell.textContent = array[0];
 
-        const priceCell = row.insertCell();
+        let priceCell = row.insertCell();
         priceCell.textContent = array[2];
 
-        const reviewsCell = row.insertCell();
+        let reviewsCell = row.insertCell();
         reviewsCell.textContent = array[3];
 
-        const linkCell = row.insertCell();
-        const linkAnchor = document.createElement('a');
+        let linkCell = row.insertCell();
+        let linkAnchor = document.createElement('a');
         linkAnchor.href = array[1];
         linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
         linkCell.appendChild(linkAnchor);
 
-        const locationCell = row.insertCell();
+        let locationCell = row.insertCell();
         locationCell.textContent = array[4];
       });
     }
@@ -173,10 +178,10 @@ if (!$_SESSION['username']) {
     // ------------------------------------------------------------
 
     function showToast(msg) {
-      const toastContainer = document.getElementById("toastContainer");
+      let toastContainer = document.getElementById("toastContainer");
 
       // Create toast element
-      const toast = document.createElement("div");
+      let toast = document.createElement("div");
       toast.classList.add("toast");
       toast.innerText = msg;
 

@@ -62,7 +62,20 @@ app.get("/scraped-data", (req, res) => {
 
     // Define the file path and name
     const filePath = "../laptops.csv";
-
+    const fs = require("fs");
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+      // Delete the file
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Error deleting file:", err);
+        } else {
+          console.log("File deleted successfully");
+        }
+      });
+    } else {
+      console.log("File does not exist");
+    }
     // Create a CSV writer instance
     const csvWriter = createCsvWriter({
       path: filePath,
@@ -161,6 +174,9 @@ app.get("/scraped-data-mobiles", (req, res) => {
       });
 
     console.log(mobiles);
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    let __dirname = "../";
+    res.sendFile(path.join(__dirname, "laptops.csv"));
     res.sendStatus(200);
     await browser.close();
   };
