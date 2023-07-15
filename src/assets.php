@@ -71,6 +71,12 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
             <i class="fa-solid fa-plus"></i>
           </a>
         </button>
+        <button class="bg-gray-500 hover:bg-gray-600 px-1 text-white rounded">
+          <!-- .... -->
+          <a href="graphView.php">
+            <i class="fa-solid fa-chart-simple"></i>
+          </a>
+        </button>
       </div>
       <div>
         <img id="barcodeCanvas" class="cursor-pointer h-[70px] w-[150px]"
