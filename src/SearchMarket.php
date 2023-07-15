@@ -24,13 +24,20 @@ if (!$_SESSION['username']) {
         <h1 class="text-3xl text-gray-600">Search Market</h1>
       </div>
       <div>
-        <Button onclick="refreshData()"
+        <button onclick="refreshData()"
           class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"><i
-            class="fa-solid fa-arrow-rotate-right"></i></Button>
-        <Button onclick="fetchLaptopCSV()"
-          class="mx-5 rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</Button>
-        <Button onclick="fetchMobileCSV()"
-          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Mobiles</Button>
+            class="fa-solid fa-arrow-rotate-right"></i></button>
+        <label for="filterBy" class="mr-2">Filters:</label>
+        <select id="filterBy" class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1" onclick="applyFilters()">
+          <option value="select">Select</option>
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          <option value="reviews">Reviews</option>
+        </select>
+        <button onclick="fetchLaptopCSV()"
+          class="mx-5 rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</button>
+        <button onclick="fetchMobileCSV()"
+          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Mobiles</button>
       </div>
     </span>
     <div id="toastContainer"></div>
@@ -52,18 +59,18 @@ if (!$_SESSION['username']) {
 
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0"></script>
+  <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
 
   <script>
     var fetched;
+    var data = []; // Variable to store the original data
 
     // ../laptops.csv
     async function fetchMobileCSV() {
       fetched = "Mobile";
       try {
         let response = await fetch('../mobiles.csv');
-        console.log(response);
         let csvData = await response.text();
-        console.log(csvData);
         let parsedData = Papa.parse(csvData);
         displayData(parsedData);
       } catch (error) {
@@ -78,42 +85,20 @@ if (!$_SESSION['username']) {
       try {
         let response = await fetch('../laptops.csv');
         let csvData = await response.text();
-        console.log(csvData);
         let parsedData = Papa.parse(csvData);
-        console.log(parsedData);
         displayData(parsedData);
       } catch (error) {
         console.error('Error fetching CSV:', error);
       }
     }
 
-    function parseCSV(csvData) {
-      let rows = csvData.split('\n');
-      let headers = rows[0].split(',');
-
-      let data = [];
-      for (let i = 1; i < rows.length; i++) {
-        let values = rows[i].split(',');
-        if (values.length === headers.length) {
-          let entry = {};
-          for (let j = 0; j < headers.length; j++) {
-            entry[headers[j]] = values[j];
-          }
-          data.push(entry);
-
-        }
-      }
-
-      return data;
-    }
-
     function displayData(obj) {
+      data = obj.data; // Store the parsed data
 
       let table = document.getElementById('output');
       table.innerHTML = "";
-      obj.data.forEach((array, index) => {
-        if (index == 0)
-          return;
+      data.forEach((array, index) => {
+        if (index === 0) return; // Skip header row
         let row = table.insertRow();
         row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
 
@@ -141,6 +126,56 @@ if (!$_SESSION['username']) {
       });
     }
 
+    function applyFilters() {
+  const filterBy = document.getElementById('filterBy').value;
+
+  let filteredData = data.slice(1); // Remove header row
+
+  if (filterBy === 'name') {
+    filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
+  } else if (filterBy === 'price') {
+    filteredData = filteredData.sort((a, b) => {
+      const priceA = parseFloat(a[2].replace(/[^\d.]/g, ''));
+      const priceB = parseFloat(b[2].replace(/[^\d.]/g, ''));
+      return priceA - priceB; // Sort by price (low to high)
+    });
+  } else if (filterBy === 'reviews') {
+    filteredData = filteredData.sort((a, b) => parseFloat(b[3]) - parseFloat(a[3])); // Sort by reviews (highest to lowest)
+  }
+
+  // Display the filtered data
+  let table = document.getElementById('output');
+  table.innerHTML = "";
+  filteredData.forEach((array, index) => {
+    let row = table.insertRow();
+    row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+
+    let serialNoCell = row.insertCell();
+    serialNoCell.classList.add("font-bold");
+    serialNoCell.textContent = index + 1;
+
+    let nameCell = row.insertCell();
+    nameCell.textContent = array[0];
+
+    let priceCell = row.insertCell();
+    priceCell.textContent = array[2];
+
+    let reviewsCell = row.insertCell();
+    reviewsCell.textContent = array[3];
+
+    let linkCell = row.insertCell();
+    let linkAnchor = document.createElement('a');
+    linkAnchor.href = array[1];
+    linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+    linkCell.appendChild(linkAnchor);
+
+    let locationCell = row.insertCell();
+    locationCell.textContent = array[4];
+  });
+}
+
+
+
     // ------------------------------------------------------------
 
     function refreshData() {
@@ -149,22 +184,19 @@ if (!$_SESSION['username']) {
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not OK');
-            }
-            else {
+            } else {
               showToast('Data Refreshed, Press Laptops Button');
             }
           })
           .catch(error => {
             console.error(error);
           });
-      }
-      else if (fetched == 'Mobile') {
+      } else if (fetched == 'Mobile') {
         fetch('http://127.0.0.1:5050/scraped-data-mobiles')
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not OK');
-            }
-            else {
+            } else {
               showToast('Data Refreshed, Press Mobiles Button');
             }
           })
@@ -172,7 +204,6 @@ if (!$_SESSION['username']) {
             console.error(error);
           });
       }
-
     }
 
     // ------------------------------------------------------------
