@@ -57,9 +57,10 @@ if (isset($_GET['submit'])) {
           <th>Sr#</th>
           <th>Name</th>
           <th>Role</th>
-          <th>Assigned Assets</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
           <th>Actions</th>
-          <th>Assets</th>
         </tr>
       </thead>
       <tbody>
@@ -77,7 +78,15 @@ if (isset($_GET['submit'])) {
             <td>
               <?php echo $value['role'] ?>
             </td>
-            <td>3</td>
+            <td>
+              <?php echo $value['email'] ?>
+            </td>
+            <td>
+              <?php echo $value['role'] ?>
+            </td>
+            <td>
+              <?php echo $value['status'] ?>
+            </td>
             <td class="space-x-1">
               <button class="cursor-pointer hover:text-gray-900" id="editUserModalBtn"
                 onclick="getUser(<?php echo $value['id'] ?>)">
@@ -88,11 +97,11 @@ if (isset($_GET['submit'])) {
                 <i class="fa-solid fa-user-xmark"></i>
               </button>
             </td>
-            <td class="cursor-pointer">
-              <button class="">
+            <!-- <td class="cursor-pointer">
+              <button class="" onclick="getUserForAssignAsset(<?php echo $value['id'] ?>)">
                 <i class="fa-solid fa-layer-group"></i>
               </button>
-            </td>
+            </td> -->
           </tr>
           <?php
           $counter = $counter + 1;
@@ -147,11 +156,55 @@ if (isset($_GET['submit'])) {
               <option value="active">Active</option>
               <option value="not active">Not Active</option>
             </select>
-            <!-- <label for="image">
-              <span class="text-gray-600"> Avatar: </span></label>
-            <input type="file" class="text-sm text-gray-600 focus:outline-none" /> -->
             <textarea id="editAdditional" name="additional_info" id="" cols="30" rows="3"
               class="p-2 focus:outline-none text-gray-700" placeholder="additional info..."></textarea>
+            <div class="flex justify-evenly">
+              <button id="saveEditedUserBtn" type="submit" name="submit"
+                class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
+                <i class="fa-solid fa-check"></i> Save
+              </button>
+              <button id="closeEditUserModalBtn"
+                class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
+                <i class="fa-solid fa-xmark"></i> <a href="employees.php">Close</a>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Assign Assets Modal Container -->
+  <div id="assignAssetModal" class="hidden fixed left-0 top-0 flex justify-center items-center h-screen w-full"
+    style="background-color: rgba(0, 0, 0, 0.5)">
+    <!-- Assign Assets Modal  -->
+    <div class="w-1/3 bg-gray-50 drop-shadow-sm shadow-gray-600 p-5 rounded-md">
+      <div class="flex justify-center items-center">
+        <form method="GET" action="assignAsset.php">
+          <div class="flex flex-col space-y-1">
+            <h1 class="text-gray-600 text-lg mb-1 text-center">
+              Assign Assets
+            </h1>
+            <input type="hidden" name="id" id="assignuserid">
+            <label for="assignusername">
+              <span class="text-gray-600"> Name: </span></label>
+            <input type="text" name="assignusername" id="assignusername" disabled
+              class="text-gray-600 focus:outline-none" />
+            <?php
+            $sql = "SELECT * FROM assets WHERE assigned = 0";
+            $result = $conn->query($sql);
+            ?>
+            <select id="assignAsset" name="assignAsset" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
+              <option value="" value="none" selected disabled hidden>
+                Assets
+              </option>
+              <?php
+              foreach ($result as $key => $cat) {
+                ?>
+                <option value=<?php echo $cat['id'] ?>><?php echo $cat['product'] ?></option>
+                <?php
+              } ?>
+            </select>
             <div class="flex justify-evenly">
               <button id="saveEditedUserBtn" type="submit" name="submit"
                 class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
@@ -185,6 +238,22 @@ if (isset($_GET['submit'])) {
           document.getElementById('editRole').value = result.role;
           document.getElementById('editGender').value = result.gender;
           document.getElementById('editAdditional').value = result.additional_info;
+        }
+      };
+      xmlhttp.open("GET", "getUser.php?id=" + id, true);
+      xmlhttp.send();
+    }
+
+    function getUserForAssignAsset(id) {
+      const editModal = document.getElementById("assignAssetModal");
+      editModal.classList.remove("hidden");
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          let result = JSON.parse(this.responseText)[0];
+          console.log(result);
+          document.getElementById('assignusername').value = result.name;
+          document.getElementById('assignuserid').value = result.id;
         }
       };
       xmlhttp.open("GET", "getUser.php?id=" + id, true);

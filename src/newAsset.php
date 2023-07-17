@@ -54,12 +54,20 @@ if (isset($_POST['submit'])) {
           <?php
 
           ?>
-          <select name="category" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
+          <?php
+          $sql = "SELECT * FROM CATEGORIES";
+          $result = $conn->query($sql);
+          ?>
+          <select id="editCategoryId" name="category" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
             <option value="" value="none" selected disabled hidden>
               Category
             </option>
-            <option value="1">Cat 1</option>
-            <option value="2">Cat 2</option>
+            <?php
+            foreach ($result as $key => $cat) {
+              ?>
+              <option value=<?php echo $cat['id'] ?>><?php echo $cat['category'] ?></option>
+              <?php
+            } ?>
           </select>
           <select name="status" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
             <option value="" value="none" selected disabled hidden>
