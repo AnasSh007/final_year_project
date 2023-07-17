@@ -20,22 +20,30 @@ if (!$_SESSION['username']) {
   <!-- Dashboard -->
   <section class="container p-6 ml-[20%] inline-block h-fit w-4/5 bottom-0 overflow-y-scroll">
     <span class="flex justify-between items-center">
-      <div class="flex justify-between items-center space-x-4 mx-1 mb-3">
+      <div class="flex items-center space-x-4 mx-1 mb-3">
         <h1 class="text-3xl text-gray-600">Search Market</h1>
+        <div class="relative">
+          <input type="text" id="filterInput"
+            class="rounded-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 w-40 sm:w-64 px-3 py-1.5 placeholder-gray-400 text-gray-700"
+            placeholder="Search Laptop/Mobile">
+          <button onclick="applyFilters('')" class="absolute inset-y-0 right-0 px-2 text-gray-500 hover:text-gray-700">
+            <i class="fa-solid fa-search"></i>
+          </button>
+        </div>
       </div>
       <div>
         <button onclick="refreshData()"
           class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"><i
             class="fa-solid fa-arrow-rotate-right"></i></button>
-        <!-- <label for="filterBy" class="mr-2">Filters:</label>
+        <!-- <label for="filterBy" class="mr-2">Filters:</label> -->
         <select id="filterBy"
           class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"
-          onselect="applyFilters()">
-          <option value="select">Select</option>
+          onclick="applyFilters('default')">
+          <option value="select">Filters</option>
           <option value="name">Name</option>
-          <option value="price">Price</option>
+          <!-- <option value="price">Price</option> -->
           <option value="reviews">Reviews</option>
-        </select> -->
+        </select>
         <button onclick="fetchLaptopCSV('../laptops.csv')"
           class="mx-5 rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</button>
         <button onclick="fetchMobileCSV('../mobiles.csv')"
@@ -157,59 +165,95 @@ if (!$_SESSION['username']) {
         laptop.location = array[4];
 
         // console.log(laptop);
-        laptops_data.push(laptop);
+        // laptops_data.push(laptop);
       });
-      console.log(laptops_data);
+      // console.log(laptops_data);
     }
 
-    function applyFilters() {
-      const filterBy = document.getElementById('filterBy').value;
+    function applyFilters(filter) {
+      if (filter === "default") {
+        const filterBy = document.getElementById('filterBy').value;
 
-      let filteredData = laptops_data; // Remove header row
+        let filteredData = data.slice(1); // Remove header row
 
-      if (filterBy === 'name') {
-        filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
-      } else if (filterBy === 'price') {
-        filteredData = filteredData.sort((a, b) => {
-          const priceA = parseFloat(a[2].replace(/[^\d.]/g, ''));
-          const priceB = parseFloat(b[2].replace(/[^\d.]/g, ''));
-          return priceA - priceB; // Sort by price (low to high)
+        if (filterBy === 'name') {
+          filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
+        } else if (filterBy === 'price') {
+          filteredData = filteredData.sort((a, b) => {
+            const priceA = parseFloat(a[2].replace(/[^\d.]/g, ''));
+            const priceB = parseFloat(b[2].replace(/[^\d.]/g, ''));
+            return priceA - priceB; // Sort by price (low to high)
+          });
+        } else if (filterBy === 'reviews') {
+          filteredData = filteredData.sort((a, b) => Math.abs(parseFloat(b[3])) - Math.abs(parseFloat(a[3]))); // Sort by reviews (highest to lowest)
+        }
+        // Display the filtered data
+        let table = document.getElementById('output');
+        table.innerHTML = "";
+        filteredData.forEach((array, index) => {
+          let row = table.insertRow();
+          row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+
+          let serialNoCell = row.insertCell();
+          serialNoCell.classList.add("font-bold");
+          serialNoCell.textContent = index + 1;
+
+          let nameCell = row.insertCell();
+          nameCell.textContent = array[0];
+
+          let priceCell = row.insertCell();
+          priceCell.textContent = array[2];
+
+          let reviewsCell = row.insertCell();
+          reviewsCell.textContent = array[3];
+
+          let linkCell = row.insertCell();
+          let linkAnchor = document.createElement('a');
+          linkAnchor.href = array[1];
+          linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+          linkCell.appendChild(linkAnchor);
+
+          let locationCell = row.insertCell();
+          locationCell.textContent = array[4];
         });
-      } else if (filterBy === 'reviews') {
-        filteredData = filteredData.sort((a, b) => parseFloat(b[3]) - parseFloat(a[3])); // Sort by reviews (highest to lowest)
       }
+      else {
+        let filterValue = document.getElementById('filterInput').value;
+        // alert(filterValue);
+        let filteredData = data.slice(1); // Remove header row
+        filteredData = data.filter(item => item[0].toLowerCase().includes(filterValue.toLowerCase()));
+        console.log(filteredData);
+        let table = document.getElementById('output');
+        table.innerHTML = "";
+        filteredData.forEach((array, index) => {
+          let row = table.insertRow();
+          row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
 
-      // Display the filtered data
-      let table = document.getElementById('output');
-      table.innerHTML = "";
-      filteredData.forEach((array, index) => {
-        let row = table.insertRow();
-        row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+          let serialNoCell = row.insertCell();
+          serialNoCell.classList.add("font-bold");
+          serialNoCell.textContent = index + 1;
 
-        let serialNoCell = row.insertCell();
-        serialNoCell.classList.add("font-bold");
-        serialNoCell.textContent = index + 1;
+          let nameCell = row.insertCell();
+          nameCell.textContent = array[0];
 
-        let nameCell = row.insertCell();
-        nameCell.textContent = array[0];
+          let priceCell = row.insertCell();
+          priceCell.textContent = array[2];
 
-        let priceCell = row.insertCell();
-        priceCell.textContent = array[2];
+          let reviewsCell = row.insertCell();
+          reviewsCell.textContent = array[3];
 
-        let reviewsCell = row.insertCell();
-        reviewsCell.textContent = array[3];
+          let linkCell = row.insertCell();
+          let linkAnchor = document.createElement('a');
+          linkAnchor.href = array[1];
+          linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+          linkCell.appendChild(linkAnchor);
 
-        let linkCell = row.insertCell();
-        let linkAnchor = document.createElement('a');
-        linkAnchor.href = array[1];
-        linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
-        linkCell.appendChild(linkAnchor);
+          let locationCell = row.insertCell();
+          locationCell.textContent = array[4];
+        });
 
-        let locationCell = row.insertCell();
-        locationCell.textContent = array[4];
-      });
+      }
     }
-
 
 
     // ------------------------------------------------------------
