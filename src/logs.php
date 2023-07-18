@@ -60,6 +60,17 @@ $result = $conn->query($sql);
           $counter = $counter + 1;
         } ?>
       </tbody>
+      <script>
+        async () => {
+          let logs = await <?php echo json_encode($result); ?>;
+          console.log("Hiiiiii");
+          console.log(logs);
+        }
+        let log = {};
+        // function func() {
+        // console.log(logs);
+        // }
+      </script>
     </table>
   </section>
 </body>

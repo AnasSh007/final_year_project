@@ -238,12 +238,21 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
               <span class="text-gray-600"> Barcode: </span></label>
             <input type="text" name="barcode" id="editBarcode" placeholder="xxxxxxxxxxxxxxx"
               class="text-gray-600 focus:outline-none" />
+            <?php
+            $sql = "SELECT * FROM CATEGORIES";
+            $result = $conn->query($sql);
+            ?>
             <select id="editCategoryId" name="categoryId" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
               <option value="" value="none" selected disabled hidden>
                 Category
               </option>
-              <option value="1">Cat 1</option>
-              <option value="2">Cat 2</option>
+              <?php
+              foreach ($result as $key => $cat) {
+                ?>
+                <option value=<?php echo $cat['id'] ?>><?php echo $cat['category'] ?></option>
+                <!-- <option value="2">Cat 2</option> -->
+                <?php
+              } ?>
             </select>
             <select id="editStatus" name="status" class="p-1 focus:outline-none text-gray-700 cursor-pointer">
               <option value="" value="none" selected disabled hidden>
