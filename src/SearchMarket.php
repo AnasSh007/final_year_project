@@ -126,7 +126,7 @@ if (!$_SESSION['username']) {
       });
     }
 
-    function applyFilters() {
+  function applyFilters() {
   const filterBy = document.getElementById('filterBy').value;
 
   let filteredData = data.slice(1); // Remove header row
