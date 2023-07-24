@@ -175,14 +175,8 @@ if (!$_SESSION['username']) {
       return parseInt(priceWithoutCurrencyAndCommas, 10);
     }
 
-<<<<<<< HEAD
     function applyFilters() {
       const filterBy = document.getElementById('filterBy').value;
-=======
-    function applyFilters(filter) {
-      if (filter === "default") {
-        const filterBy = document.getElementById('filterBy').value;
->>>>>>> 510e264a4007cc82a96f519d9570a91688888853
 
       let filteredData = data.slice(1); // Remove header row
 
