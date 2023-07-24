@@ -24,21 +24,21 @@ if (isset($_POST['submit'])) {
     <div class="flex justify-center items-center">
       <form action="" method="POST">
         <div class="flex flex-col space-y-1">
-          <h1 class="text-gray-600 text-lg mb-1 text-center">
+          <h1 class="text-blue-800 text-lg mb-1 text-center">
             Add New Category
           </h1>
           <label for="category">
-            <span class="text-gray-600"> Category: </span></label>
+            <span class="text-blue-800"> Category: </span></label>
           <input type="text" placeholder="Enter category name here..." name="category"
             class="text-gray-600 focus:outline-none" />
           <br />
           <div class="flex justify-evenly">
             <button type="submit" name="submit"
-              class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
+              class="rounded items-center text-white bg-blue-600 hover:bg-blue-800 p-1 drop-shadow-sm w-fit px-3 shadow-black">
               <i class="fa-solid fa-check"></i> Save
             </button>
             <button
-              class="rounded items-center text-white bg-gray-600 hover:bg-gray-700 p-1 drop-shadow-sm w-fit px-3 shadow-black">
+              class="rounded items-center text-white bg-blue-600 hover:bg-blue-800 p-1 drop-shadow-sm w-fit px-3 shadow-black">
               <i class="fa-solid fa-xmark"></i><a href="categories.php"> Close </a>
             </button>
           </div>

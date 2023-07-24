@@ -65,28 +65,28 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
   <section class="container p-6 ml-[20%] inline-block h-fit w-4/5 bottom-0 overflow-y-scroll">
     <span class="flex justify-between items-center">
       <div class="flex justify-between items-center space-x-4 mx-1 mb-3">
-        <h1 class="text-3xl text-gray-600">Assets</h1>
-        <button class="bg-gray-500 hover:bg-gray-600 px-1 text-white rounded">
+        <h1 class="text-3xl text-blue-600">Assets</h1>
+        <button class="bg-blue-600 hover:bg-gray-600 px-1 text-white rounded">
           <a href="newAsset.php">
             <i class="fa-solid fa-plus"></i>
           </a>
         </button>
-        <button class="bg-gray-500 hover:bg-gray-600 px-1 text-white rounded">
-          <!-- .... -->
+        <!-- <button class="bg-blue-600 hover:bg-gray-600 px-1 text-white rounded">
           <a href="graphView.php">
             <i class="fa-solid fa-chart-simple"></i>
           </a>
-        </button>
+        </button> -->
       </div>
       <div>
         <img id="barcodeCanvas" class="cursor-pointer h-[70px] w-[150px]"
           style="box-shadow: inset 0px 0px 5px grey;"></img>
-        <span onclick="printBarcode()" class="m-0 text-xs text-gray-600 italic cursor-pointer hover:underline">click to
+        <span onclick="printBarcode()"
+          class="m-0 text-xs text-gray-600 italic cursor-pointer hover:underline hover:text-blue-800">click to
           print</span>
       </div>
     </span>
     <table class="text-gray-600 text-center w-full mt-5 text-sm">
-      <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
+      <thead class="border-b text-gray-50 uppercase bg-blue-600 h-8">
         <tr>
           <th>Sr#</th>
           <th>Asset Name</th>
@@ -104,7 +104,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
         $counter = 1;
         foreach ($result as $key => $value) {
           ?>
-          <tr class="border-b border-gray-400 h-10 hover:border-b-2">
+          <tr class="border-b border-gray-400 h-10 hover:text-blue-800">
             <td>
               <?php echo $counter ?>
             </td>
@@ -131,12 +131,11 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
               echo $res['CATEGORY']; ?>
             </td>
             <td class="space-x-1">
-              <button class="cursor-pointer hover:text-gray-900" id="editUserModalBtn"
-                onclick="getAsset(<?php echo $value['id'] ?>)">
+              <button class="cursor-pointer " id="editUserModalBtn" onclick="getAsset(<?php echo $value['id'] ?>)">
                 <i class="fa-solid fa-pen"></i>
               </button>
               <span>|</span>
-              <button onclick="deleteAsset(<?php echo $value['id'] ?>)" class="cursor-pointer hover:text-gray-900">
+              <button onclick="deleteAsset(<?php echo $value['id'] ?>)" class="cursor-pointer">
                 <i class="fa-regular fa-trash-can"></i>
               </button>
             </td>
@@ -151,9 +150,9 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
         } ?>
       </tbody>
     </table>
-    <h2 class="my-4 text-xl text-gray-600">Repairing Assets List</h2>
+    <h2 class="my-4 text-xl text-blue-800">Repairing Assets List</h2>
     <table class="text-gray-600 text-center w-full mt-5 text-sm">
-      <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
+      <thead class="border-b text-gray-50 uppercase bg-blue-600 h-8">
         <tr>
           <th>Sr#</th>
           <th>Asset Name</th>
@@ -169,7 +168,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
         $counter = 1;
         foreach ($RepairingAssets as $key => $value) {
           ?>
-          <tr class="border-b border-gray-400 h-10 hover:border-b-2">
+          <tr class="border-b border-gray-400 h-10 hover:text-blue-800">
             <td>
               <?php echo $counter ?>
             </td>
@@ -193,7 +192,7 @@ if (isset($_GET['saveEditedRepairingAssetBtn'])) {
               echo $res['CATEGORY']; ?>
             </td>
             <td>
-              <button class="cursor-pointer hover:text-gray-900" id="editUserModalBtn"
+              <button class="cursor-pointer hover:text-gray-900 " id="editUserModalBtn"
                 onclick="getRepairingAsset(<?php echo $value['id'] ?>)">
                 <i class="fa-solid fa-circle-info"></i>
               </button>

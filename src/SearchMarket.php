@@ -21,7 +21,7 @@ if (!$_SESSION['username']) {
   <section class="container p-6 ml-[20%] inline-block h-fit w-4/5 bottom-0 overflow-y-scroll">
     <span class="flex justify-between items-center">
       <div class="flex items-center space-x-4 mx-1 mb-3">
-        <h1 class="text-3xl text-gray-600">Search Market</h1>
+        <h1 class="text-3xl text-blue-800">Search Market</h1>
         <div class="relative">
           <input type="text" id="filterInput"
             class="rounded-sm border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 w-40 sm:w-64 px-3 py-1.5 placeholder-gray-400 text-gray-700"
@@ -33,11 +33,11 @@ if (!$_SESSION['username']) {
       </div>
       <div>
         <button onclick="refreshData()"
-          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"><i
+          class="rounded-sm text-white bg-blue-600 hover:bg-blue-800 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"><i
             class="fa-solid fa-arrow-rotate-right"></i></button>
         <!-- <label for="filterBy" class="mr-2">Filters:</label> -->
         <select id="filterBy"
-          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"
+          class="rounded-sm text-white bg-blue-600 hover:bg-blue-800 p-1.5 px-2.5 drop-shadow-sm shadow-black space-x-1"
           onclick="applyFilters('default')">
           <option value="select">Filters</option>
           <option value="name">Name</option>
@@ -45,14 +45,14 @@ if (!$_SESSION['username']) {
           <option value="reviews">Reviews</option>
         </select>
         <button onclick="fetchLaptopCSV('../laptops.csv')"
-          class="mx-5 rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</button>
+          class="mx-5 rounded-sm text-white bg-blue-600 hover:bg-blue-800 p-1.5 drop-shadow-sm shadow-black space-x-1">Laptops</button>
         <button onclick="fetchMobileCSV('../mobiles.csv')"
-          class="rounded-sm text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">Mobiles</button>
+          class="rounded-sm text-white bg-blue-600 hover:bg-blue-800 p-1.5 drop-shadow-sm shadow-black space-x-1">Mobiles</button>
       </div>
     </span>
     <div id="toastContainer"></div>
     <table id="myTable" class="text-gray-600 text-center w-full mt-5 text-sm">
-      <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
+      <thead class="border-b text-gray-50 uppercase bg-blue-600 h-8">
         <tr>
           <th>Sr#</th>
           <th>Product</th>
@@ -149,7 +149,7 @@ if (!$_SESSION['username']) {
         laptop.price = array[2];
 
         let reviewsCell = row.insertCell();
-        reviewsCell.textContent = array[3];
+        reviewsCell.textContent = Math.abs(array[3]);
         laptop.reviews = array[3];
 
         let linkCell = row.insertCell();
@@ -170,6 +170,11 @@ if (!$_SESSION['username']) {
       // console.log(laptops_data);
     }
 
+    function convertPriceToInteger(priceString) {
+      const priceWithoutCurrencyAndCommas = priceString.replace(/Rs\.|,/g, '');
+      return parseInt(priceWithoutCurrencyAndCommas, 10);
+    }
+
     function applyFilters(filter) {
       if (filter === "default") {
         const filterBy = document.getElementById('filterBy').value;
@@ -180,8 +185,8 @@ if (!$_SESSION['username']) {
           filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
         } else if (filterBy === 'price') {
           filteredData = filteredData.sort((a, b) => {
-            const priceA = parseFloat(a[2].replace(/[^\d.]/g, ''));
-            const priceB = parseFloat(b[2].replace(/[^\d.]/g, ''));
+            const priceA = convertPriceToInteger(priceA);
+            const priceB = convertPriceToInteger(priceB);
             return priceA - priceB; // Sort by price (low to high)
           });
         } else if (filterBy === 'reviews') {
@@ -205,7 +210,7 @@ if (!$_SESSION['username']) {
           priceCell.textContent = array[2];
 
           let reviewsCell = row.insertCell();
-          reviewsCell.textContent = array[3];
+          reviewsCell.textContent = Math.abs(array[3]);
 
           let linkCell = row.insertCell();
           let linkAnchor = document.createElement('a');
@@ -240,7 +245,7 @@ if (!$_SESSION['username']) {
           priceCell.textContent = array[2];
 
           let reviewsCell = row.insertCell();
-          reviewsCell.textContent = array[3];
+          reviewsCell.textContent = Math.abs(array[3]);
 
           let linkCell = row.insertCell();
           let linkAnchor = document.createElement('a');

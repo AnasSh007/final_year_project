@@ -4,7 +4,7 @@
       <!-- User Image and User Name -->
       <div class="flex items-center justify-start px-4 w-1/2 space-x-5 h-20">
         <img src="../img/user.webp" class="w-12 rounded-full" alt="user-image" />
-        <span class="text-gray-600">
+        <span class="text-blue-800">
           <?php echo $_SESSION['username'] ?>
         </span>
       </div>
@@ -12,7 +12,7 @@
       <div class="flex items-center justify-end px-4 w-1/2 space-x-5 h-20">
         <form action="" method="POST">
           <button type="submit" name="submit"
-            class="rounded text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm shadow-black space-x-1">
+            class="rounded text-white bg-blue-600 hover:bg-blue-800 p-1.5 drop-shadow-sm shadow-black space-x-1">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span>Log Out</span>
           </button>

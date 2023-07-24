@@ -39,8 +39,8 @@ if (isset($_GET['submit'])) {
   <section class="container p-6 ml-[20%] inline-block h-fit w-4/5 bottom-0 overflow-y-scroll">
     <span class="flex justify-between items-center">
       <div class="flex justify-between items-center space-x-4 mx-1 mb-3">
-        <h1 class="text-3xl text-gray-600">Employees</h1>
-        <button id="newUserModalBtn" class="bg-gray-500 hover:bg-gray-600 px-1 text-white rounded">
+        <h1 class="text-3xl text-blue-800">Employees</h1>
+        <button id="newUserModalBtn" class="bg-blue-600 hover:bg-blue-800 px-1 text-white rounded">
           <a href="newUser.php">
             <i class="fa-solid fa-plus"></i>
           </a>
@@ -52,11 +52,10 @@ if (isset($_GET['submit'])) {
       </div> -->
     </span>
     <table class="text-gray-600 text-center w-full mt-5 text-sm">
-      <thead class="border-b text-gray-50 uppercase bg-gray-500 h-8">
+      <thead class="border-b text-gray-50 uppercase bg-blue-600 h-8">
         <tr>
           <th>Sr#</th>
           <th>Name</th>
-          <th>Role</th>
           <th>Email</th>
           <th>Role</th>
           <th>Status</th>
@@ -68,15 +67,12 @@ if (isset($_GET['submit'])) {
         $counter = 1;
         foreach ($result as $key => $value) {
           ?>
-          <tr class="border-b border-gray-400 h-10 hover:border-b-2">
+          <tr class="border-b border-gray-400 h-10 hover:text-blue-800">
             <td>
               <?php echo $counter ?>
             </td>
             <td>
               <?php echo $value['name'] ?>
-            </td>
-            <td>
-              <?php echo $value['role'] ?>
             </td>
             <td>
               <?php echo $value['email'] ?>

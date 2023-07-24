@@ -30,21 +30,21 @@ if (isset($_POST['submit'])) {
     <section class="flex justify-center items-center bg-gray-50 w-2/5 h-96 drop-shadow shadow-black rounded-lg">
       <div class="flex flex-col items-center justify-evenly mx-auto p-2 pt-8 cursor-pointer">
         <img src="../img/logo-removebg-preview.png" class="w-14 mb-5" alt="PieCyfer-logo" />
-        <span class="flex flex-col justify-center text-lg text-center text-gray-600">PieCyfer Asset Deck</span>
+        <span class="flex flex-col justify-center text-lg text-center text-blue-800">PieCyfer Asset Deck</span>
       </div>
       <form action="" method="POST">
         <div class="flex flex-col space-y-1">
-          <h1 class="text-gray-600 text-xl mb-5">Login</h1>
+          <h1 class="text-blue-800 text-xl mb-5">Login</h1>
           <label for="username">
-            <span class="text-gray-600 text-lg"> Username: </span></label>
+            <span class="text-blue-800 text-lg"> Username: </span></label>
           <input type="text" placeholder="example@gmail.com" class="text-lg text-gray-600 focus:outline-none"
             name="username" />
           <label for="password">
-            <span class="text-gray-600 text-lg"> Password: </span></label>
+            <span class="text-blue-800 text-lg"> Password: </span></label>
           <input type="password" placeholder="enter password here..." class="text-lg text-gray-600 focus:outline-none"
             name="password" />
           <button type="submit" name="submit" value="submit"
-            class="rounded items-center text-white bg-gray-500 hover:bg-gray-600 p-1.5 drop-shadow-sm w-fit px-5 shadow-black">
+            class="rounded items-center text-white bg-blue-600 hover:bg-blue-800 p-1.5 drop-shadow-sm w-fit px-5 shadow-black">
             Log In
           </button>
           <!-- <a href="forgot-password.html" class="text-gray-600 hover:underline">Forgot your password?</a> -->

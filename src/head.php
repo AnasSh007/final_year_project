@@ -10,6 +10,7 @@
   <title>PieCyfer Asset Deck</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.3/JsBarcode.all.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <style>
     #toastContainer {
       position: fixed;
