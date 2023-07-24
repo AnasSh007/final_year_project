@@ -175,89 +175,94 @@ if (!$_SESSION['username']) {
       return parseInt(priceWithoutCurrencyAndCommas, 10);
     }
 
+<<<<<<< HEAD
+    function applyFilters() {
+      const filterBy = document.getElementById('filterBy').value;
+=======
     function applyFilters(filter) {
       if (filter === "default") {
         const filterBy = document.getElementById('filterBy').value;
+>>>>>>> 510e264a4007cc82a96f519d9570a91688888853
 
-        let filteredData = data.slice(1); // Remove header row
+      let filteredData = data.slice(1); // Remove header row
 
-        if (filterBy === 'name') {
-          filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
-        } else if (filterBy === 'price') {
-          filteredData = filteredData.sort((a, b) => {
-            const priceA = convertPriceToInteger(priceA);
-            const priceB = convertPriceToInteger(priceB);
-            return priceA - priceB; // Sort by price (low to high)
-          });
-        } else if (filterBy === 'reviews') {
-          filteredData = filteredData.sort((a, b) => Math.abs(parseFloat(b[3])) - Math.abs(parseFloat(a[3]))); // Sort by reviews (highest to lowest)
-        }
-        // Display the filtered data
-        let table = document.getElementById('output');
-        table.innerHTML = "";
-        filteredData.forEach((array, index) => {
-          let row = table.insertRow();
-          row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
-
-          let serialNoCell = row.insertCell();
-          serialNoCell.classList.add("font-bold");
-          serialNoCell.textContent = index + 1;
-
-          let nameCell = row.insertCell();
-          nameCell.textContent = array[0];
-
-          let priceCell = row.insertCell();
-          priceCell.textContent = array[2];
-
-          let reviewsCell = row.insertCell();
-          reviewsCell.textContent = Math.abs(array[3]);
-
-          let linkCell = row.insertCell();
-          let linkAnchor = document.createElement('a');
-          linkAnchor.href = array[1];
-          linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
-          linkCell.appendChild(linkAnchor);
-
-          let locationCell = row.insertCell();
-          locationCell.textContent = array[4];
+      if (filterBy === 'name') {
+        filteredData = filteredData.sort((a, b) => a[0].localeCompare(b[0])); // Sort by name
+      } else if (filterBy === 'price') {
+        filteredData = filteredData.sort((a, b) => {
+          const priceA = convertPriceToInteger(priceA);
+          const priceB = convertPriceToInteger(priceB);
+          return priceA - priceB; // Sort by price (low to high)
         });
+      } else if (filterBy === 'reviews') {
+        filteredData = filteredData.sort((a, b) => Math.abs(parseFloat(b[3])) - Math.abs(parseFloat(a[3]))); // Sort by reviews (highest to lowest)
       }
+      // Display the filtered data
+      let table = document.getElementById('output');
+      table.innerHTML = "";
+      filteredData.forEach((array, index) => {
+        let row = table.insertRow();
+        row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+
+        let serialNoCell = row.insertCell();
+        serialNoCell.classList.add("font-bold");
+        serialNoCell.textContent = index + 1;
+
+        let nameCell = row.insertCell();
+        nameCell.textContent = array[0];
+
+        let priceCell = row.insertCell();
+        priceCell.textContent = array[2];
+
+        let reviewsCell = row.insertCell();
+        reviewsCell.textContent = Math.abs(array[3]);
+
+        let linkCell = row.insertCell();
+        let linkAnchor = document.createElement('a');
+        linkAnchor.href = array[1];
+        linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+        linkCell.appendChild(linkAnchor);
+
+        let locationCell = row.insertCell();
+        locationCell.textContent = array[4];
+      });
+    }
       else {
-        let filterValue = document.getElementById('filterInput').value;
-        // alert(filterValue);
-        let filteredData = data.slice(1); // Remove header row
-        filteredData = data.filter(item => item[0].toLowerCase().includes(filterValue.toLowerCase()));
-        console.log(filteredData);
-        let table = document.getElementById('output');
-        table.innerHTML = "";
-        filteredData.forEach((array, index) => {
-          let row = table.insertRow();
-          row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
+      let filterValue = document.getElementById('filterInput').value;
+      // alert(filterValue);
+      let filteredData = data.slice(1); // Remove header row
+      filteredData = data.filter(item => item[0].toLowerCase().includes(filterValue.toLowerCase()));
+      console.log(filteredData);
+      let table = document.getElementById('output');
+      table.innerHTML = "";
+      filteredData.forEach((array, index) => {
+        let row = table.insertRow();
+        row.classList.add("cursor-pointer", "border-b", "border-gray-400", "h-10", "hover:border-b-2");
 
-          let serialNoCell = row.insertCell();
-          serialNoCell.classList.add("font-bold");
-          serialNoCell.textContent = index + 1;
+        let serialNoCell = row.insertCell();
+        serialNoCell.classList.add("font-bold");
+        serialNoCell.textContent = index + 1;
 
-          let nameCell = row.insertCell();
-          nameCell.textContent = array[0];
+        let nameCell = row.insertCell();
+        nameCell.textContent = array[0];
 
-          let priceCell = row.insertCell();
-          priceCell.textContent = array[2];
+        let priceCell = row.insertCell();
+        priceCell.textContent = array[2];
 
-          let reviewsCell = row.insertCell();
-          reviewsCell.textContent = Math.abs(array[3]);
+        let reviewsCell = row.insertCell();
+        reviewsCell.textContent = Math.abs(array[3]);
 
-          let linkCell = row.insertCell();
-          let linkAnchor = document.createElement('a');
-          linkAnchor.href = array[1];
-          linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
-          linkCell.appendChild(linkAnchor);
+        let linkCell = row.insertCell();
+        let linkAnchor = document.createElement('a');
+        linkAnchor.href = array[1];
+        linkAnchor.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+        linkCell.appendChild(linkAnchor);
 
-          let locationCell = row.insertCell();
-          locationCell.textContent = array[4];
-        });
+        let locationCell = row.insertCell();
+        locationCell.textContent = array[4];
+      });
 
-      }
+    }
     }
 
 
