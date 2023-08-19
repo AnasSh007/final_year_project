@@ -1,9 +1,9 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
+$servername = "";
+$username = "";
 $password = "";
-$dbname = "assetdeckdb";
+$dbname = "";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
